@@ -25,4 +25,10 @@ public class PostController {
     public void post(@RequestBody @Valid PostCreate request) throws Exception {
         postService.write(request);
     }
+
+    @GetMapping("/posts/{postId}")
+    public Post get(@PathVariable("postId") Long id) {
+        Post post = postService.get(id);
+        return post;
+    }
 }
