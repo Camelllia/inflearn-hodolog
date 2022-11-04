@@ -1,7 +1,9 @@
 package com.hodolog.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hodolog.domain.Post;
 import com.hodolog.repository.PostRepository;
+import com.hodolog.request.PostCreate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -27,6 +30,9 @@ class PostControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Autowired
     private PostRepository postRepository;
@@ -41,14 +47,21 @@ class PostControllerTest {
     void test() throws Exception{
 
         // 보낼 데이터 : {글 제목, 글 내용}
+        //given
+        PostCreate request = PostCreate.builder()
+                        .title("제목입니다")
+                        .content("내용입니다")
+                        .build();
+
+        String json = objectMapper.writeValueAsString(request);
 
         //expected
         mockMvc.perform(post("/posts")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\": \"제목입니다\", \"content\" : \"내용입니다\"}")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
                 )
                 .andExpect(status().isOk())
-                .andExpect(content().string("{}"))
+                .andExpect(content().string(""))
                 .andDo(print());
     }
 
@@ -57,11 +70,17 @@ class PostControllerTest {
     void test2() throws Exception{
 
         // 보낼 데이터 : {글 제목, 글 내용}
+        //given
+        PostCreate request = PostCreate.builder()
+                        .content("내용입니다")
+                        .build();
+
+        String json = objectMapper.writeValueAsString(request);
 
         //expected
         mockMvc.perform(post("/posts")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\": null, \"content\" : \"내용입니다\"}")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("400"))
@@ -75,11 +94,18 @@ class PostControllerTest {
     void test3() throws Exception {
 
         // 보낼 데이터 : {글 제목, 글 내용}
+        //given
+        PostCreate request = PostCreate.builder()
+                .title("제목입니다")
+                .content("내용입니다")
+                .build();
+
+        String json =  objectMapper.writeValueAsString(request);
 
         //when
         mockMvc.perform(post("/posts")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\": \"제목입니다\", \"content\" : \"내용입니다\"}")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
                 )
                 .andExpect(status().isOk())
                 .andDo(print());

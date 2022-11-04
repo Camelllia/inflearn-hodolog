@@ -1,5 +1,6 @@
 package com.hodolog.controller;
 
+import com.hodolog.domain.Post;
 import com.hodolog.request.PostCreate;
 import com.hodolog.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public Map<String, String> post(@RequestBody @Valid PostCreate request) throws Exception {
+    public void post(@RequestBody @Valid PostCreate request) throws Exception {
         postService.write(request);
-        return Map.of();
     }
 }
