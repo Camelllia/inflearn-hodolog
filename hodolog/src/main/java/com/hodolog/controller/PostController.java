@@ -32,4 +32,9 @@ public class PostController {
         PostResponse postResponse = postService.get(id);
         return postResponse;
     }
+
+    @GetMapping("/posts")
+    public List<PostResponse> getList() {
+        return postService.getList();
+    }
 }
