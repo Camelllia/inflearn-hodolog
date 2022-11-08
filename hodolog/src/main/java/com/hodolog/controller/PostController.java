@@ -2,6 +2,7 @@ package com.hodolog.controller;
 
 import com.hodolog.domain.Post;
 import com.hodolog.request.PostCreate;
+import com.hodolog.request.PostSearch;
 import com.hodolog.response.PostResponse;
 import com.hodolog.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<PostResponse> getList(Pageable pageable) {
-        return postService.getList(pageable);
+    public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
+        return postService.getList(postSearch);
     }
 }
