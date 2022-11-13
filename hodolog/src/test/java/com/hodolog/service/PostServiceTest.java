@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.data.domain.Sort.Direction.*;
 
 @SpringBootTest
 class PostServiceTest {
@@ -189,5 +188,24 @@ class PostServiceTest {
 
         assertEquals("호돌맨", changedPost.getTitle());
         assertEquals("초가집", changedPost.getContent());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    public void test7() {
+
+        //given
+        Post post = Post.builder()
+                .title("호돌맨")
+                .content("반포자이")
+                .build();
+
+        postRepository.save(post);
+
+        //when
+        postService.delete(post.getId());
+
+        //then
+        assertEquals(0, postRepository.count());
     }
 }
